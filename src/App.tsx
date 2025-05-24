@@ -1,6 +1,6 @@
 import { Task } from "./components/Tools/kanban/components/Card/TaskCard";
 import { Mode } from "./components/Tools/kanban/components/Card/Category";
-import KanbanBoard from "./components/Tools/kanban/Kanban";
+import KanbanBoard from "./components/Tools/kanban/components/DragKanban/Kanban";
 
 function App() {
   const categeory = [

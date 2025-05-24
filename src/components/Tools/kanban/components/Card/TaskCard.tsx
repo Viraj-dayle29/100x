@@ -54,11 +54,13 @@ const TaskCard: React.FC<TaskCardProps> = ({
       const newStar = !isStar;
       setStar(newStar);
       onChange?.({ ...task, star: newStar });
+      // update task 
     }
   };
 
   const handleTitle = (value: string) => {
     onChange?.({ ...task, textValue: value });
+    // update task
   };
 
   const handleSelectedCategeory = (
@@ -73,6 +75,8 @@ const TaskCard: React.FC<TaskCardProps> = ({
       ...task,
       categeories: updatedCategories,
     });
+
+    // update task 
   };
 
   return (

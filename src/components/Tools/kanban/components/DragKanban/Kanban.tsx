@@ -1,8 +1,8 @@
 import { useMemo, useState, useCallback } from "react";
 
-import BoardColumn, { Column } from "./components/Column/Column";
+import BoardColumn, { Column } from "../Column/Column";
 
-import { type Task } from "./components/Card/TaskCard";
+import { type Task } from "../Card/TaskCard";
 
 import {
   DragDropContext,
@@ -72,7 +72,6 @@ const KanbanBoard = ({
         setColumns(updatedColumns.sort((a, b) => a.cpos - b.cpos));
         return;
       }
-
       // Reorder tasks
       const startColId = source.droppableId;
       const endColId = destination.droppableId;
@@ -120,7 +119,6 @@ const KanbanBoard = ({
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      {/* Columns droppable for column reordering */}
       <Droppable droppableId="board" direction="horizontal" type="COLUMN">
         {(provided: DroppableProvided) => (
           <div
