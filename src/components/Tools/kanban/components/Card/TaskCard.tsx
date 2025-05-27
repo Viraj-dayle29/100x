@@ -1,38 +1,37 @@
 import { useState } from "react";
 import { ACTIONS, ActionType, DropdownMenuDemo } from "./DropDown";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Title from "../Title";
 import Category, { CategeoryProps, valueItem } from "./Category";
 import { cn } from "@/lib/utils";
 import { Draggable } from "@hello-pangea/dnd";
 import React from "react";
+import { useTaskById } from "../../context/TaskContext";
+import { useUpdateTask } from "../../tanStack/Task.Tanstack";
 
-export interface Task {
-  id: string;
-  columnId: string;
-  textValue?: string;
-  star?: boolean;
-  date: string;
-  categeories?: CategeoryProps[];
-  tpos: number;
-}
+// export interface Task {
+//   id: string;
+//   columnId: string;
+//   textValue?: string;
+//   star?: boolean;
+//   date: string;
+//   categeories?: CategeoryProps[];
+//   tpos: number;
+// }
+
+type TaskId = string;
 
 export type TaskType = "Task";
 
 interface TaskCardProps {
   index: number;
-  task: Task;
+  taskId: TaskId;
   disable?: boolean;
-  onChange?: (updatedTask: Task) => void;
 }
 
 export interface TaskDragData {
   type: TaskType;
-  task: Task;
+  taskId: TaskId;
 }
 
 const StarIndicator = ({ isStar }: { isStar: boolean }) =>
@@ -40,48 +39,48 @@ const StarIndicator = ({ isStar }: { isStar: boolean }) =>
     <span className={cn("ml-2 text-yellow-400", "cursor-default")}>⭐</span>
   ) : null;
 
-const TaskCard: React.FC<TaskCardProps> = ({
-  task,
-  index,
-  disable,
-  onChange,
-}) => {
+const TaskCard: React.FC<TaskCardProps> = ({ taskId, index, disable }) => {
+  const task = useTaskById(taskId);
+  const { mutate } = useUpdateTask();
+  if (!task) return <div>Task not found</div>;
+
   const [isHover, setHoverState] = useState<boolean>(false);
-  const [isStar, setStar] = useState<boolean>(task.star ?? false);
 
   const handleDropDownMenu = (value: ActionType) => {
     if (value === ACTIONS.STAR) {
-      const newStar = !isStar;
-      setStar(newStar);
-      onChange?.({ ...task, star: newStar });
-      // update task 
+      mutate({
+        taskId,
+        updates: { star: !task.star },
+      });
     }
   };
 
   const handleTitle = (value: string) => {
-    onChange?.({ ...task, textValue: value });
-    // update task
-  };
-
-  const handleSelectedCategeory = (
-    categoryName: string,
-    value: valueItem[]
-  ) => {
-    const updatedCategories = task.categeories?.map((cat) =>
-      cat.name === categoryName ? { ...cat, preSelected: value } : cat
-    );
-
-    onChange?.({
-      ...task,
-      categeories: updatedCategories,
+    mutate({
+      taskId,
+      updates: { textValue: value },
     });
-
-    // update task 
   };
+
+  // const handleSelectedCategeory = (
+  //   categoryName: string,
+  //   value: valueItem[]
+  // ) => {
+  //   const updatedCategories = task.categeories?.map((cat) =>
+  //     cat.name === categoryName ? { ...cat, preSelected: value } : cat
+  //   );
+
+  //   onChange?.({
+  //     ...task,
+  //     categeories: updatedCategories,
+  //   });
+
+  //   // update task
+  // };
 
   return (
     <Draggable
-      draggableId={task.id.toString()}
+      draggableId={taskId.toString()}
       index={index}
       isDragDisabled={disable}
     >
@@ -112,7 +111,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
               <div className="flex justify-between">
                 <div className="flex justify-center items-center">
                   <p className="uppercase text-white text-md">{task.date}</p>
-                  <StarIndicator isStar={isStar} />
+                  <StarIndicator isStar={task.star} />
                 </div>
                 <div>
                   <DropdownMenuDemo
@@ -134,7 +133,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
                 onChange={handleTitle}
               />
               <div className="flex flex-col gap-1">
-                {task.categeories?.length
+                {/* {task.categeories?.length
                   ? task.categeories.map((item) => (
                       <Category
                         key={`category-${item.name}-${task.id}`}
@@ -148,7 +147,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
                         }
                       />
                     ))
-                  : null}
+                  : null} */}
               </div>
             </CardContent>
           </Card>

@@ -1,30 +1,15 @@
 import { Mode } from "./components/Card/Category";
+import { Task, TasksMap } from "./context/TaskContext";
 
-const categeory = [
-  {
-    name: "Fruits",
-    mode: Mode.MULTIPLE,
-    value: [
-      { color: "oklch(94.5% 0.129 101.54)", valueName: "Apple" },
-      { color: "yellow", valueName: "Banana" },
-      { color: "green", valueName: "Kiwi" },
-      { color: "blue", valueName: "Blueerry" },
-      { color: "red", valueName: "strawberry" },
-      { color: "pink", valueName: "Guava" },
-    ],
-  },
-  {
-    name: "Proirity",
-    mode: Mode.SINGLE,
-    value: [
-      { color: "red", valueName: "High" },
-      { color: "yellow", valueName: "Low" },
-      { color: "green", valueName: "Medium" },
-    ],
-  },
-];
+export type Column = {
+  title: string;
+  cpos: number;
+  tasksWithPosition: { taskId: string; tpos: number }[];
+};
 
-const categoryData = {
+export type ColumnMap = Record<string, Column>;
+
+let categoryData = {
   category: {
     "cat-1": {
       name: "Fruits",
@@ -51,159 +36,222 @@ const categoryData = {
   },
 };
 
-const sampleColumn = {
+const sampleColumn: ColumnMap = {
   column1: {
     title: "To Do",
     cpos: 4,
-    tasksWithPosition: [{ taskId: "task1", tpos: 1 }],
+    tasksWithPosition: [
+      { taskId: "task1", tpos: 1 },
+      { taskId: "task2", tpos: 2 },
+      { taskId: "task3", tpos: 3 },
+    ],
   },
-  column2: { title: "In Progress", cpos: 1 },
-  column3: { title: "Review", cpos: 2 },
-  column4: { title: "Done", cpos: 3 },
+  column2: {
+    title: "In Progress",
+    cpos: 1,
+    tasksWithPosition: [
+      { taskId: "task4", tpos: 1 },
+      { taskId: "task5", tpos: 2 },
+      { taskId: "task6", tpos: 3 },
+    ],
+  },
+  column3: {
+    title: "Review",
+    cpos: 2,
+    tasksWithPosition: [
+      { taskId: "task7", tpos: 1 },
+      { taskId: "task8", tpos: 2 },
+      { taskId: "task9", tpos: 3 },
+    ],
+  },
+  column4: {
+    title: "Done",
+    cpos: 3,
+    tasksWithPosition: [
+      { taskId: "task10", tpos: 1 },
+      { taskId: "task11", tpos: 2 },
+      { taskId: "task12", tpos: 3 },
+      { taskId: "task13", tpos: 4 },
+    ],
+  },
 };
 
-const sampleTasks = {
+let sampleTasks: TasksMap = {
   task1: {
-    columnId: "column1",
     textValue: "Design homepage",
     star: true,
     date: "29-feb-2024",
-    tpos: 1,
     selectedTags: {
-      cat1: ["id1", "id2"], // Apple, Banana
-      cat2: "id7", // High
+      cat1: ["id1", "id2"],
+      cat2: "id7",
     },
   },
   task2: {
-    columnId: "column1",
     textValue: "Setup database schema",
     star: false,
     date: "01-mar-2024",
-    tpos: 2,
     selectedTags: {
-      cat1: ["id3"], // Kiwi
-      cat2: "id9", // Medium
+      cat1: ["id3"],
+      cat2: "id9",
     },
   },
   task3: {
-    columnId: "column1",
     textValue: "Create auth module",
     star: false,
     date: "02-mar-2024",
-    tpos: 3,
     selectedTags: {
-      cat1: ["id4"], // Blueberry
-      cat2: "id8", // Low
+      cat1: ["id4"],
+      cat2: "id8",
     },
   },
   task4: {
-    columnId: "column2",
     textValue: "Responsive fixes",
     star: true,
     date: "02-mar-2024",
-    tpos: 1,
     selectedTags: {
-      cat1: ["id5", "id6"], // Strawberry, Guava
-      cat2: "id7", // High
+      cat1: ["id5", "id6"],
+      cat2: "id7",
     },
   },
   task5: {
-    columnId: "column2",
     textValue: "Refactor API layer",
     star: false,
     date: "03-mar-2024",
-    tpos: 2,
     selectedTags: {
       cat1: ["id1"],
       cat2: "id8",
     },
   },
   task6: {
-    columnId: "column2",
     textValue: "Setup CI/CD",
     star: true,
     date: "03-mar-2024",
-    tpos: 3,
     selectedTags: {
       cat1: ["id2", "id6"],
       cat2: "id9",
     },
   },
   task7: {
-    columnId: "column3",
     textValue: "Lint and format code",
     star: false,
     date: "04-mar-2024",
-    tpos: 4,
     selectedTags: {
       cat1: ["id3"],
       cat2: "id9",
     },
   },
   task8: {
-    columnId: "column3",
     textValue: "QA testing",
     star: true,
     date: "04-mar-2024",
-    tpos: 1,
     selectedTags: {
       cat1: ["id4"],
       cat2: "id7",
     },
   },
   task9: {
-    columnId: "column3",
     textValue: "Browser compatibility check",
     star: false,
     date: "05-mar-2024",
-    tpos: 2,
     selectedTags: {
       cat1: ["id5"],
       cat2: "id8",
     },
   },
   task10: {
-    columnId: "column3",
     textValue: "Fix critical bugs",
     star: true,
     date: "06-mar-2024",
-    tpos: 3,
     selectedTags: {
       cat1: ["id6"],
       cat2: "id7",
     },
   },
   task11: {
-    columnId: "column4",
     textValue: "Deploy to production",
     star: true,
     date: "07-mar-2024",
-    tpos: 1,
     selectedTags: {
       cat1: ["id1", "id2"],
       cat2: "id9",
     },
   },
   task12: {
-    columnId: "column4",
     textValue: "Prepare documentation",
     star: false,
     date: "08-mar-2024",
-    tpos: 3,
     selectedTags: {
       cat1: ["id3"],
       cat2: "id8",
     },
   },
   task13: {
-    columnId: "column4",
     textValue: "Team review & handoff",
     star: true,
     date: "09-mar-2024",
-    tpos: 2,
     selectedTags: {
       cat1: ["id4", "id5"],
       cat2: "id7",
     },
   },
+};
+
+export const getTasks = (): Promise<TasksMap> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ ...sampleTasks });
+    }, 3000);
+  });
+};
+
+export const updateTask = (
+  taskId: string,
+  updates: Partial<Task>
+): Promise<Task> => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (!sampleTasks[taskId]) {
+        reject(new Error("Task not found"));
+        return;
+      }
+
+      const updatedTask = {
+        ...sampleTasks[taskId],
+        ...updates,
+        selectedTags: {
+          ...sampleTasks[taskId].selectedTags,
+          ...updates.selectedTags,
+        },
+      };
+
+      sampleTasks[taskId] = updatedTask;
+      resolve(updatedTask);
+    }, 1000);
+  });
+};
+
+export const getColumns = (): Promise<ColumnMap> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ ...sampleColumn });
+    }, 3000);
+  });
+};
+
+export const updateColumn = (
+  columnId: string,
+  updates: Partial<Column>
+): Promise<{ [key: string]: Column }> => {
+  return new Promise((resolve, reject) => {
+    if (!sampleColumn[columnId]) {
+      return reject(new Error("Column ID not found"));
+    }
+
+    sampleColumn[columnId] = {
+      ...sampleColumn[columnId],
+      ...updates,
+    };
+
+    resolve({ [columnId]: sampleColumn[columnId] });
+  });
 };
